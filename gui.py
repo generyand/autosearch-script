@@ -66,7 +66,11 @@ class AutoTyperGUI:
 
         # Start Button
         self.start_button = ttk.Button(main_frame, text="Start Typing", command=self.start_typing)
-        self.start_button.grid(row=6, column=0, columnspan=2, pady=(0, 20))
+        self.start_button.grid(row=6, column=0, pady=(0, 20))
+
+        # Stop Button
+        self.stop_button = ttk.Button(main_frame, text="Stop Typing", command=self.stop_typing, state="disabled")
+        self.stop_button.grid(row=6, column=1, pady=(0, 20))
 
         # Status Label
         self.status_label = ttk.Label(main_frame, text="Ready", style="Status.TLabel")
@@ -93,9 +97,13 @@ class AutoTyperGUI:
             pass
 
     def start_typing(self):
-        # Disable the start button and update status
+        # Disable the start button, enable the stop button, and update status
         self.start_button.config(state="disabled")
+        self.stop_button.config(state="normal")
         self.status_label.config(text="Typing in progress...")
+
+        # Reset the stop flag
+        self.stop_flag.clear()
 
         # Get values from entries
         initial_delay = float(self.initial_delay.get())
@@ -104,8 +112,15 @@ class AutoTyperGUI:
         windows_open = int(self.windows_open.get())
 
         # Start typing in a separate thread
-        threading.Thread(target=self.run_typing_simulation, args=(
-            initial_delay, phrase_count, delay_between_windows, windows_open)).start()
+        self.typing_thread = threading.Thread(target=self.run_typing_simulation, args=(
+            initial_delay, phrase_count, delay_between_windows, windows_open))
+        self.typing_thread.start()
+
+    def stop_typing(self):
+        if self.typing_thread and self.typing_thread.is_alive():
+            self.stop_flag.set()
+            self.status_label.config(text="Stopping...")
+            self.stop_button.config(state="disabled")
 
     def run_typing_simulation(self, initial_delay, phrase_count, delay_between_windows, windows_open):
         phrase_generator = PhraseGenerator()
@@ -114,18 +129,24 @@ class AutoTyperGUI:
         time.sleep(initial_delay)
 
         for _ in range(phrase_count):
+            if self.stop_flag.is_set():
+                break
             for _ in range(windows_open):
+                if self.stop_flag.is_set():
+                    break
                 phrase = phrase_generator.generate_phrase()
                 typing_simulator.type_phrase(phrase)
                 typing_simulator.alt_tab()
                 time.sleep(delay_between_windows)
 
-        # Re-enable the start button and update status
+        # Re-enable the start button, disable the stop button, and update status
         self.master.after(0, self.update_ui_after_completion)
 
     def update_ui_after_completion(self):
         self.start_button.config(state="normal")
-        self.status_label.config(text="Typing completed!")
+        self.stop_button.config(state="disabled")
+        self.status_label.config(text="Typing completed!" if not self.stop_flag.is_set() else "Typing stopped.")
+        self.stop_flag.clear()
 
 if __name__ == "__main__":
     root = tk.Tk()
