@@ -1,6 +1,6 @@
 # Configuration constants
-EDGE_PATH = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
-BING_URL = "https://www.bing.com"
+# EDGE_PATH = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
+# BING_URL = "https://www.bing.com"
 INITIAL_DELAY = 4
 PHRASE_COUNT = 35
 TYPING_DELAY = 2
