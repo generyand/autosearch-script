@@ -8,6 +8,8 @@ env/
 venv/
 ENV/
 
+.venv
+
 # IDE
 .idea/
 .vscode/
