@@ -6,12 +6,20 @@ An automated typing tool with both command-line and GUI interfaces.
 
 ### Linux (Fedora/RHEL)
 ```bash
-sudo dnf install python3-tkinter
+# Install Tkinter and other required system dependencies
+sudo dnf install python3-tkinter scrot python3-devel
+
+# Set up X11 permissions (required for GUI automation)
+xhost +SI:localuser:$USER
 ```
 
 ### Linux (Ubuntu/Debian)
 ```bash
-sudo apt-get install python3-tk
+# Install Tkinter and other required system dependencies
+sudo apt-get install python3-tk scrot python3-dev
+
+# Set up X11 permissions (required for GUI automation)
+xhost +SI:localuser:$USER
 ```
 
 ### Windows
@@ -21,7 +29,7 @@ Tkinter comes pre-installed with Python.
 
 1. Clone this repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/generyand/autosearch-script.git
    cd autosearch-script
    ```
 
@@ -48,6 +56,10 @@ Tkinter comes pre-installed with Python.
 
 Run the script:
 ```bash
+# On Linux, make sure to set the DISPLAY variable
+DISPLAY=:0 python main.py
+
+# On Windows
 python main.py
 ```
 
@@ -55,6 +67,10 @@ python main.py
 
 Run the GUI script:
 ```bash
+# On Linux, make sure to set the DISPLAY variable
+DISPLAY=:0 python gui.py
+
+# On Windows
 python gui.py
 ```
 
@@ -64,6 +80,24 @@ The GUI provides an easy-to-use interface with the following features:
 - Multiple window support
 - Customizable delay between windows
 - Real-time recommended delay calculations
+
+## Troubleshooting
+
+### Linux
+If you encounter X11/display-related errors:
+1. Make sure X11 permissions are set: `xhost +SI:localuser:$USER`
+2. Set the DISPLAY environment variable: `export DISPLAY=:0`
+3. Run the script with the display variable: `DISPLAY=:0 python gui.py`
+
+The `DISPLAY=:0` variable tells the application which display to use:
+- `:0` refers to the first (usually main) display on your local machine
+- This is required for GUI applications to know where to appear
+- If you have multiple monitors, you might need to use `:0.0`, `:0.1`, etc.
+- Without this setting, GUI applications won't know which display to use
+
+### Common Issues
+- If PyAutoGUI is not found, try reinstalling it: `pip install --force-reinstall pyautogui`
+- Make sure all system dependencies are installed before running the scripts
 
 ## Deactivating Virtual Environment
 
