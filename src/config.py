@@ -2,7 +2,7 @@
 # EDGE_PATH = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
 # BING_URL = "https://www.bing.com"
 INITIAL_DELAY = 4
-PHRASE_COUNT = 3
+PHRASE_COUNT = 10
 TYPING_DELAY = 2
 WINDOWS_OPEN = 3
 DELAY_BETWEEN_WINDOWS = 5 / WINDOWS_OPEN
