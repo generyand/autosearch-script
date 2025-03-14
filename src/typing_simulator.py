@@ -74,10 +74,14 @@ class TypingSimulator:
 
     def _focus_search_bar(self) -> None:
         """
-        Focus the search bar by pressing '/'.
+        Focus the search bar by pressing '/' twice.
         This is a common shortcut in many browsers to focus the search field.
+        Pressing twice ensures the search bar gets focused even if the first
+        press is missed or the browser is in a state where one press isn't enough.
         """
         pyautogui.press('/')
+        pyautogui.press('/')
+        
         time.sleep(self.NAVIGATION_DELAY)
 
     def _select_all_text(self) -> None:

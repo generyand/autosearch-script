@@ -1,6 +1,14 @@
-## Auto Typer
+# Auto Typer
 
-An automated typing tool with both command-line and GUI interfaces.
+An automated typing tool that simulates user input across multiple browser windows. Perfect for parallel search operations and automated form filling. Features both command-line and GUI interfaces with configurable delays and intelligent window management.
+
+Key Features:
+- 🔄 Multi-window support with smart window cycling
+- ⚡ Optimized window switching patterns
+- ⌨️ Automated text input with configurable delays
+- 🎯 Intelligent search bar focusing and text selection
+- 🖥️ GUI interface with real-time delay recommendations
+- 🐧 Cross-platform support (Linux/Windows)
 
 ## Prerequisites
 
@@ -56,6 +64,18 @@ Tkinter comes pre-installed with Python.
    pip install -r requirements.txt
    ```
 
+4. Run the setup script (Linux only):
+   ```bash
+   # This will automatically:
+   # - Check for required dependencies
+   # - Set up X11 permissions
+   # - Enable and configure Remote Desktop
+   python -m src.utils.setup
+   
+   # If you only need to configure Remote Desktop:
+   python -m src.utils.remote_desktop
+   ```
+
 ## Configuration
 
 Before running the script, configure the following settings in `config.py`:
@@ -80,10 +100,12 @@ Make sure these values match your setup:
 
 Run the script:
 ```bash
-# On Linux, make sure to set the DISPLAY variable
+# On Linux:
+# IMPORTANT: Do not use sudo with the script. Instead, use the setup utility:
+python -m src.utils.setup  # Run this first to set up permissions
 DISPLAY=:0 python main.py
 
-# On Windows
+# On Windows:
 python main.py
 ```
 
@@ -91,10 +113,12 @@ python main.py
 
 Run the GUI script:
 ```bash
-# On Linux, make sure to set the DISPLAY variable
+# On Linux:
+# IMPORTANT: Do not use sudo with the script. Instead, use the setup utility:
+python -m src.utils.setup  # Run this first to set up permissions
 DISPLAY=:0 python gui.py
 
-# On Windows
+# On Windows:
 python gui.py
 ```
 
@@ -109,10 +133,23 @@ The GUI provides an easy-to-use interface with the following features:
 
 ### Linux
 If you encounter X11/display-related errors:
-1. Make sure X11 permissions are set: `xhost +SI:localuser:$USER`
-2. Set the DISPLAY environment variable: `export DISPLAY=:0`
-3. Ensure Remote Desktop is enabled: `gsettings set org.gnome.desktop.remote-desktop.rdp enable true`
-4. Run the script with the display variable: `DISPLAY=:0 python gui.py`
+1. Run the setup utility: `python -m src.utils.setup`
+2. If issues persist, manually check:
+   - X11 permissions: `xhost +SI:localuser:$USER`
+   - Display variable: `export DISPLAY=:0`
+   - Remote Desktop: `python -m src.utils.remote_desktop`
+3. Run the script with display variable: `DISPLAY=:0 python gui.py`
+
+**Important Note**: Do not run the script with sudo. If you get permission errors:
+1. Use the setup utility: `python -m src.utils.setup`
+2. Ensure your virtual environment is activated and packages are installed there
+3. If you absolutely must use sudo (not recommended), install packages system-wide: `sudo pip install -r requirements.txt`
+
+The setup utility (`src.utils.setup`) will:
+- Check for required system dependencies
+- Configure X11 permissions automatically
+- Enable and configure Remote Desktop
+- Provide clear error messages if anything fails
 
 The `DISPLAY=:0` variable tells the application which display to use:
 - `:0` refers to the first (usually main) display on your local machine
@@ -123,6 +160,7 @@ The `DISPLAY=:0` variable tells the application which display to use:
 ### Common Issues
 - If PyAutoGUI is not found, try reinstalling it: `pip install --force-reinstall pyautogui`
 - Make sure all system dependencies are installed before running the scripts
+- If setup fails, run `python -m src.utils.setup` to see detailed error messages
 
 ## Deactivating Virtual Environment
 
