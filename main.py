@@ -6,13 +6,11 @@ It handles both initial setup and continuous typing operations.
 """
 
 from src.phrase_generator import PhraseGenerator
-# from src.browser_controller import BrowserController
 from src.typing_simulator import TypingSimulator
 from src.config import INITIAL_DELAY, PHRASE_COUNT, DELAY_BETWEEN_WINDOWS, WINDOWS_OPEN
 import time
 import pyautogui
-from src.utils.typing_simulator import TypeSimulator
-from src.utils.remote_desktop import check_remote_desktop_status, prompt_user_confirmation
+from src.utils.remote_desktop import enable_remote_desktop, is_linux
 
 def setup_automation() -> tuple[PhraseGenerator, TypingSimulator]:
     """
@@ -65,43 +63,45 @@ def handle_subsequent_iterations(typing_simulator: TypingSimulator,
         # Add a small delay between iterations
         time.sleep(DELAY_BETWEEN_WINDOWS)
 
-def check_remote_desktop():
-    """Check if remote desktop is properly configured"""
-    if not check_remote_desktop_status():
-        print("\n⚠️ Remote Desktop is not properly configured!")
-        print("This is required for the auto-typer to work correctly.")
-        print("\nWould you like to configure Remote Desktop now? (y/n)")
-        response = input().strip().lower()
-        if response in ['y', 'yes']:
-            if not prompt_user_confirmation():
-                print("\n❌ Remote Desktop setup not completed. Please run the script again when ready.")
-                return False
-        else:
-            print("\n❌ Remote Desktop is required. Please run 'python -m src.utils.remote_desktop' first.")
-            return False
+def setup_remote_desktop() -> bool:
+    """
+    Ensure remote desktop is properly configured
+    
+    Returns:
+        bool: True if remote desktop is enabled, False otherwise
+    """
+    if not is_linux():
+        print("ℹ️ Not running on Linux, skipping remote desktop setup")
+        return True
+        
+    print("\n⚙️ Checking Remote Desktop configuration...")
+    if not enable_remote_desktop():
+        print("\n❌ Remote Desktop setup required. Please run 'python -m src.utils.remote_desktop' and try again.")
+        return False
     return True
 
 def main():
     """
     Main execution function that coordinates the typing automation.
     Flow:
-    1. Setup components
-    2. Initial delay
-    3. First iteration (setup windows)
-    4. Subsequent iterations (continuous operation)
+    1. Setup remote desktop
+    2. Setup components
+    3. Initial delay
+    4. First iteration (setup windows)
+    5. Subsequent iterations (continuous operation)
     """
     print("\n🤖 Auto Typer Script")
     print("===================")
     
-    # Check remote desktop configuration first
-    if not check_remote_desktop():
+    # Setup remote desktop first
+    if not setup_remote_desktop():
         return
     
     # Initialize components
     phrase_generator, typing_simulator = setup_automation()
     
     # Wait for initial setup
-    print(f"Starting in {INITIAL_DELAY} seconds...")
+    print(f"\nStarting in {INITIAL_DELAY} seconds...")
     time.sleep(INITIAL_DELAY)
     
     # Execute automation
@@ -111,7 +111,7 @@ def main():
     print("Running subsequent iterations...")
     handle_subsequent_iterations(typing_simulator, phrase_generator)
     
-    print("Automation completed!")
+    print("\n✨ Automation completed!")
 
 if __name__ == "__main__":
     main()

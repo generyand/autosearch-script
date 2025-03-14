@@ -23,9 +23,9 @@ class TypingSimulator:
     """
     
     # Delay constants for timing control
-    NAVIGATION_DELAY = 0.1
-    TYPING_DELAY = 0.1
-    SUBMISSION_DELAY = 0.2
+    NAVIGATION_DELAY = 0.5
+    TYPING_DELAY = 0.5
+    SUBMISSION_DELAY = 0.5
     
     def type_phrase(self, phrase: str, is_first_iteration: bool = False) -> None:
         """

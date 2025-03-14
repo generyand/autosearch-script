@@ -1,90 +1,79 @@
 """
 Remote Desktop Configuration Utility
 ----------------------------------
-Provides functionality to enable and configure remote desktop settings
-for Linux systems using gsettings.
+Simple utility to trigger remote desktop dialog and confirm setup.
 """
 
 import platform
 import sys
 import pyautogui
 
-def trigger_settings_shortcut() -> bool:
+def prompt_user(prompt: str) -> bool:
     """
-    Trigger remote desktop dialog by typing 'yes'
+    Get yes/no response from user
     
     Returns:
-        bool: True if triggered, False otherwise
+        bool: True if user answers yes, False if no
+    """
+    while True:
+        response = input(f"\n{prompt} (yes/no) ").strip().lower()
+        if response in ['y', 'yes']:
+            return True
+        if response in ['n', 'no']:
+            return False
+        print("⚠️ Please answer 'yes' or 'no'")
+
+def trigger_dialog() -> bool:
+    """
+    Trigger remote desktop dialog
     """
     try:
         pyautogui.typewrite('yes')
-        print("✅ Remote desktop dialog triggered")
         return True
     except Exception as e:
-        print(f"❌ Error triggering dialog: {e}")
+        print(f"❌ Error: {e}")
         return False
 
 def enable_remote_desktop() -> bool:
     """
-    Enable remote desktop by triggering the interaction dialog and guiding user
-    
-    Returns:
-        bool: True if successful, False otherwise
+    Guide user through enabling remote desktop
     """
     print("\n📋 Remote Desktop Setup:")
-    print("1. A dialog will appear when you type 'yes'")
-    print("2. Enable 'Remote Desktop' in the dialog")
-    print("3. Enable 'Remote Desktop Interaction' if available")
+    print("1. Dialog will appear when you type 'yes'")
+    print("2. Enable 'Allow Desktop Interaction'")
+    print("3. Click 'Share'")
     
-    while True:
-        print("\nWould you like to trigger the Remote Desktop dialog? (yes/no)")
-        response = input().strip().lower()
+    if not prompt_user("Ready to trigger the Remote Desktop dialog?"):
+        print("❌ Setup cancelled")
+        return False
         
-        if response in ['y', 'yes']:
-            trigger_settings_shortcut()
-            print("\n⏳ Please enable Remote Desktop in the dialog...")
-            
-            print("\nHave you enabled Remote Desktop? (yes/no)")
-            enabled = input().strip().lower()
-            
-            if enabled in ['y', 'yes']:
-                print("✅ Remote Desktop enabled successfully!")
-                return True
-            elif enabled in ['n', 'no']:
-                print("❌ Remote Desktop not enabled. Please try again.")
-                continue
-            else:
-                print("⚠️ Please answer 'yes' or 'no'")
-                continue
-                
-        elif response in ['n', 'no']:
-            print("❌ Setup cancelled. Run the script again when ready.")
+    if not trigger_dialog():
+        return False
+        
+    print("\n⏳ Please enable Remote Desktop in the dialog...")
+    while not prompt_user("Have you enabled Remote Desktop?"):
+        if not prompt_user("Would you like to try again?"):
+            print("❌ Setup cancelled")
             return False
-        else:
-            print("⚠️ Please answer 'yes' or 'no'")
-
-def open_remote_desktop_settings() -> bool:
-    """
-    Open the remote desktop settings dialog
+        trigger_dialog()
+        print("\n⏳ Please enable Remote Desktop in the dialog...")
     
-    Returns:
-        bool: True if successful, False otherwise
-    """
-    return trigger_settings_shortcut()
+    print("✅ Remote Desktop enabled!")
+    return True
 
 def is_linux() -> bool:
-    """Check if the current system is Linux."""
+    """Check if system is Linux"""
     return platform.system().lower() == 'linux'
 
 if __name__ == "__main__":
     if not is_linux():
-        print("❌ This script only works on Linux systems")
+        print("❌ This script only works on Linux")
         sys.exit(1)
     
-    print("\n🖥️ Remote Desktop Setup Utility")
-    print("================================")
+    print("\n🖥️ Remote Desktop Setup")
+    print("=====================")
     
     if enable_remote_desktop():
-        print("\n✨ Remote Desktop dialog triggered!")
+        print("\n✨ Setup complete!")
     else:
-        print("\n❌ Failed to trigger Remote Desktop dialog") 
+        print("\n❌ Setup failed") 
