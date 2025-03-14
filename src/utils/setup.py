@@ -8,7 +8,7 @@ including remote desktop configuration and permissions.
 import subprocess
 import sys
 import os
-from .remote_desktop import enable_remote_desktop, is_linux, check_remote_desktop_status
+from .remote_desktop import enable_remote_desktop, is_linux
 
 def setup_x11_permissions() -> bool:
     """
@@ -135,11 +135,10 @@ def setup_environment() -> bool:
         print("❌ Failed to set up X11 permissions")
         success = False
 
-    # Configure remote desktop if not already enabled
-    if not check_remote_desktop_status():
-        if not enable_remote_desktop():
-            print("❌ Failed to enable remote desktop")
-            success = False
+    # Enable remote desktop
+    if not enable_remote_desktop():
+        print("❌ Failed to enable remote desktop")
+        success = False
 
     if success:
         print("\n✅ Environment setup completed successfully")

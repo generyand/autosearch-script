@@ -173,4 +173,48 @@ deactivate
 
 Make sure to have the necessary windows/applications open before starting the auto-typer, as it will automatically switch between windows using Alt+Tab.
 
+## Remote Desktop Setup on Fedora Linux
+
+Setting up remote desktop on Fedora Linux requires special handling due to SELinux constraints:
+
+### 1. Run the Remote Desktop Setup Script
+
+```bash
+python -m src.utils.remote_desktop
+```
+
+This script will:
+- Check if SELinux is in enforcing mode (which blocks remote desktop)
+- Set SELinux to permissive mode temporarily if needed
+- Configure remote desktop settings via gsettings
+- Try to open the sharing settings dialog
+- Restart the remote desktop service
+
+### 2. Manual Steps Required
+
+Even after running the script, you need to:
+1. When the Sharing settings window opens, click on "Remote Desktop"
+2. Toggle "Remote Desktop" to ON
+3. Ensure "Allow Remote Interaction" is enabled
+4. Click "Share" to confirm the settings
+
+### 3. SELinux Considerations
+
+Remote desktop in Fedora has known SELinux issues:
+- SELinux in enforcing mode will block remote desktop functionality
+- You'll see a black screen when connecting if SELinux is enforcing
+- To make SELinux permissive permanently:
+  ```bash
+  sudo nano /etc/selinux/config
+  # Change SELINUX=enforcing to SELINUX=permissive
+  ```
+
+### 4. Troubleshooting
+
+If you see a black screen or connection errors:
+- Ensure SELinux is in permissive mode: `getenforce`
+- Check if port 3389 is available: `ss -tuln sport = :3389`
+- Make sure no other remote desktop service (like xrdp) is running
+- Verify that "Allow Remote Interaction" is enabled in settings
+
 Made by Exploiter ni Sah

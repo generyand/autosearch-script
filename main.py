@@ -10,6 +10,9 @@ from src.phrase_generator import PhraseGenerator
 from src.typing_simulator import TypingSimulator
 from src.config import INITIAL_DELAY, PHRASE_COUNT, DELAY_BETWEEN_WINDOWS, WINDOWS_OPEN
 import time
+import pyautogui
+from src.utils.typing_simulator import TypeSimulator
+from src.utils.remote_desktop import check_remote_desktop_status, prompt_user_confirmation
 
 def setup_automation() -> tuple[PhraseGenerator, TypingSimulator]:
     """
@@ -62,6 +65,22 @@ def handle_subsequent_iterations(typing_simulator: TypingSimulator,
         # Add a small delay between iterations
         time.sleep(DELAY_BETWEEN_WINDOWS)
 
+def check_remote_desktop():
+    """Check if remote desktop is properly configured"""
+    if not check_remote_desktop_status():
+        print("\n⚠️ Remote Desktop is not properly configured!")
+        print("This is required for the auto-typer to work correctly.")
+        print("\nWould you like to configure Remote Desktop now? (y/n)")
+        response = input().strip().lower()
+        if response in ['y', 'yes']:
+            if not prompt_user_confirmation():
+                print("\n❌ Remote Desktop setup not completed. Please run the script again when ready.")
+                return False
+        else:
+            print("\n❌ Remote Desktop is required. Please run 'python -m src.utils.remote_desktop' first.")
+            return False
+    return True
+
 def main():
     """
     Main execution function that coordinates the typing automation.
@@ -71,6 +90,13 @@ def main():
     3. First iteration (setup windows)
     4. Subsequent iterations (continuous operation)
     """
+    print("\n🤖 Auto Typer Script")
+    print("===================")
+    
+    # Check remote desktop configuration first
+    if not check_remote_desktop():
+        return
+    
     # Initialize components
     phrase_generator, typing_simulator = setup_automation()
     

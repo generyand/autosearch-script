@@ -5,64 +5,72 @@ Provides functionality to enable and configure remote desktop settings
 for Linux systems using gsettings.
 """
 
-import subprocess
 import platform
 import sys
+import pyautogui
+
+def trigger_settings_shortcut() -> bool:
+    """
+    Trigger remote desktop dialog by typing 'yes'
+    
+    Returns:
+        bool: True if triggered, False otherwise
+    """
+    try:
+        pyautogui.typewrite('yes')
+        print("✅ Remote desktop dialog triggered")
+        return True
+    except Exception as e:
+        print(f"❌ Error triggering dialog: {e}")
+        return False
 
 def enable_remote_desktop() -> bool:
     """
-    Enable remote desktop access and configure necessary settings.
+    Enable remote desktop by triggering the interaction dialog and guiding user
     
     Returns:
         bool: True if successful, False otherwise
     """
-    try:
-        # Enable RDP
-        subprocess.run(['gsettings', 'set', 'org.gnome.desktop.remote-desktop.rdp', 'enable', 'true'],
-                      check=True)
+    print("\n📋 Remote Desktop Setup:")
+    print("1. A dialog will appear when you type 'yes'")
+    print("2. Enable 'Remote Desktop' in the dialog")
+    print("3. Enable 'Remote Desktop Interaction' if available")
+    
+    while True:
+        print("\nWould you like to trigger the Remote Desktop dialog? (yes/no)")
+        response = input().strip().lower()
         
-        # Enable required remote desktop settings
-        settings = [
-            # Enable screen sharing
-            ['org.gnome.desktop.sharing', 'enabled', 'true'],
-            # Allow remote control
-            ['org.gnome.desktop.remote-desktop.rdp', 'enable-remote-control', 'true'],
-            # Enable encryption
-            ['org.gnome.desktop.remote-desktop.rdp', 'tls-cert', 'true'],
-            # Enable view-only access
-            ['org.gnome.desktop.remote-desktop.rdp', 'view-only', 'false']
-        ]
-        
-        for schema, key, value in settings:
-            subprocess.run(['gsettings', 'set', schema, key, value], check=True)
+        if response in ['y', 'yes']:
+            trigger_settings_shortcut()
+            print("\n⏳ Please enable Remote Desktop in the dialog...")
             
-        print("✅ Remote desktop has been enabled successfully")
-        return True
-        
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Error enabling remote desktop: {e}")
-        return False
-    except Exception as e:
-        print(f"❌ Unexpected error: {e}")
-        return False
+            print("\nHave you enabled Remote Desktop? (yes/no)")
+            enabled = input().strip().lower()
+            
+            if enabled in ['y', 'yes']:
+                print("✅ Remote Desktop enabled successfully!")
+                return True
+            elif enabled in ['n', 'no']:
+                print("❌ Remote Desktop not enabled. Please try again.")
+                continue
+            else:
+                print("⚠️ Please answer 'yes' or 'no'")
+                continue
+                
+        elif response in ['n', 'no']:
+            print("❌ Setup cancelled. Run the script again when ready.")
+            return False
+        else:
+            print("⚠️ Please answer 'yes' or 'no'")
 
-def check_remote_desktop_status() -> bool:
+def open_remote_desktop_settings() -> bool:
     """
-    Check if remote desktop is currently enabled.
+    Open the remote desktop settings dialog
     
     Returns:
-        bool: True if enabled, False otherwise
+        bool: True if successful, False otherwise
     """
-    try:
-        result = subprocess.run(
-            ['gsettings', 'get', 'org.gnome.desktop.remote-desktop.rdp', 'enable'],
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        return result.stdout.strip() == 'true'
-    except subprocess.CalledProcessError:
-        return False
+    return trigger_settings_shortcut()
 
 def is_linux() -> bool:
     """Check if the current system is Linux."""
@@ -72,9 +80,11 @@ if __name__ == "__main__":
     if not is_linux():
         print("❌ This script only works on Linux systems")
         sys.exit(1)
-        
-    if check_remote_desktop_status():
-        print("✅ Remote desktop is already enabled")
+    
+    print("\n🖥️ Remote Desktop Setup Utility")
+    print("================================")
+    
+    if enable_remote_desktop():
+        print("\n✨ Remote Desktop dialog triggered!")
     else:
-        print("⚙️ Enabling remote desktop...")
-        enable_remote_desktop() 
+        print("\n❌ Failed to trigger Remote Desktop dialog") 
