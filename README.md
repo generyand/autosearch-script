@@ -12,10 +12,27 @@ Key Features:
 
 ## Prerequisites
 
-### Linux (Fedora/RHEL)
+### Linux
+First, install tkinter which is required for the GUI components:
+
+For Fedora/RHEL:
 ```bash
-# Install Tkinter and other required system dependencies
-sudo dnf install python3-tkinter scrot python3-devel
+# Install Tkinter and Python development packages first
+sudo dnf install python3-tkinter python3-devel
+```
+
+For Ubuntu/Debian:
+```bash
+# Install Tkinter and Python development packages first
+sudo apt-get install python3-tk python3-dev
+```
+
+Then install other system dependencies:
+
+For Fedora/RHEL:
+```bash
+# Install additional required system dependencies
+sudo dnf install scrot
 
 # Set up X11 permissions (required for GUI automation)
 xhost +SI:localuser:$USER
@@ -24,10 +41,10 @@ xhost +SI:localuser:$USER
 gsettings set org.gnome.desktop.remote-desktop.rdp enable true
 ```
 
-### Linux (Ubuntu/Debian)
+For Ubuntu/Debian:
 ```bash
-# Install Tkinter and other required system dependencies
-sudo apt-get install python3-tk scrot python3-dev
+# Install additional required system dependencies
+sudo apt-get install scrot
 
 # Set up X11 permissions (required for GUI automation)
 xhost +SI:localuser:$USER
