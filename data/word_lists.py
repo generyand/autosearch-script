@@ -324,3 +324,112 @@ HISTORICAL_PLACES = [
     'Petra', 'Mada\'in Saleh', 'Hegra', 'Bosra', 'Palmyra', 'Dura-Europos', 'Hatra', 'Ctesiphon', 'Persepolis', 'Pasargadae',
     'Lalibela', 'Axum', 'Gondar', 'Timbuktu', 'Djenne', 'Kilwa Kisiwani', 'Gedi', 'Mapungubwe', 'Thulamela', 'Khami'
 ]
+
+# Question template lists for generating 5W1H questions
+WHAT_QUESTIONS = [
+    'What is {}?',
+    'What happened to {}?',
+    'What caused {}?',
+    'What does {} do?',
+    'What makes {} special?',
+    'What are the benefits of {}?',
+    'What is the purpose of {}?',
+    'What is the difference between {} and {}?',
+    'What should I know about {}?',
+    'What can you tell me about {}?',
+    'What are the features of {}?',
+    'What is the history of {}?',
+    'What are the types of {}?',
+    'What is the best {}?',
+    'What is the meaning of {}?'
+]
+
+WHY_QUESTIONS = [
+    'Why do we need {}?',
+    'Why is {} important?',
+    'Why does {} happen?',
+    'Why should I use {}?',
+    'Why did {} change?',
+    'Why is {} better than {}?',
+    'Why are people interested in {}?',
+    'Why can\'t we have {}?',
+    'Why does {} cost so much?',
+    'Why is {} so popular?',
+    'Why should I learn about {}?',
+    'Why is {} considered the best?',
+    'Why do experts recommend {}?',
+    'Why did {} become obsolete?',
+    'Why is {} controversial?'
+]
+
+WHEN_QUESTIONS = [
+    'When was {} invented?',
+    'When did {} first appear?',
+    'When is the best time for {}?',
+    'When should I use {}?',
+    'When will {} be available?',
+    'When did {} become popular?',
+    'When is {} most effective?',
+    'When does {} expire?',
+    'When should {} be replaced?',
+    'When was the golden age of {}?',
+    'When can I expect results from {}?',
+    'When did {} change the world?',
+    'When is {} celebration?',
+    'When is {} season?',
+    'When did {} last occur?'
+]
+
+WHO_QUESTIONS = [
+    'Who invented {}?',
+    'Who uses {}?',
+    'Who benefits from {}?',
+    'Who discovered {}?',
+    'Who is responsible for {}?',
+    'Who should avoid {}?',
+    'Who recommends {}?',
+    'Who leads {} industry?',
+    'Who popularized {}?',
+    'Who wrote about {}?',
+    'Who is the expert on {}?',
+    'Who changed {} forever?',
+    'Who supports {}?',
+    'Who is affected by {}?',
+    'Who revolutionized {}?'
+]
+
+WHERE_QUESTIONS = [
+    'Where can I find {}?',
+    'Where does {} come from?',
+    'Where is {} produced?',
+    'Where should I use {}?',
+    'Where is {} most popular?',
+    'Where was {} first discovered?',
+    'Where can I learn about {}?',
+    'Where is the best {}?',
+    'Where did {} originate?',
+    'Where are {} stored?',
+    'Where can I buy {}?',
+    'Where should I avoid {}?',
+    'Where is {} headquartered?',
+    'Where can {} be found naturally?',
+    'Where is the largest {}?'
+]
+
+HOW_QUESTIONS = [
+    'How does {} work?',
+    'How can I use {}?',
+    'How is {} made?',
+    'How does {} benefit us?',
+    'How long does {} last?',
+    'How expensive is {}?',
+    'How effective is {}?',
+    'How has {} changed over time?',
+    'How do I maintain {}?',
+    'How much does {} cost?',
+    'How can I improve my {}?',
+    'How difficult is it to learn {}?',
+    'How do experts rate {}?',
+    'How is {} different from {}?',
+    'How can I get started with {}?'
+]
