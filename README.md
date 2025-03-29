@@ -78,21 +78,35 @@ Tkinter comes pre-installed with Python.
 
 ## Configuration
 
-Before running the script, configure the following settings in `config.py`:
+The Auto-Typer script can be configured using environment variables in a `.env` file. Copy the example below to create your own configuration:
 
-```python
-# Number of windows to cycle through
-WINDOWS_OPEN = 3  # Adjust this to match your open window count
+```
+# Auto-typer Configuration
 
-# Number of phrases to type in each window
-PHRASE_COUNT = 5  # Adjust based on your needs
+# Timing settings
+INITIAL_DELAY=4        # Initial delay in seconds before typing starts
+PHRASE_COUNT=10        # Number of phrases to type
+TYPING_DELAY=2         # Delay between typing characters in seconds
+WINDOWS_OPEN=10        # Number of browser windows to use
+
+# Advanced settings
+MIN_DELAY_BETWEEN_WINDOWS=0.025    # Minimum delay between window switches
+DELAY_CALCULATION_NUMERATOR=5      # Used to calculate delay between windows
 ```
 
-Make sure these values match your setup:
-1. `WINDOWS_OPEN`: Set this to the exact number of windows you have open
-2. `PHRASE_COUNT`: Set this to the number of phrases you want to type in each window
+The actual delay between windows is calculated as: `max(DELAY_CALCULATION_NUMERATOR / WINDOWS_OPEN, MIN_DELAY_BETWEEN_WINDOWS)`
 
-**Important**: Incorrect window count can cause the script to malfunction, so ensure this matches your actual open windows.
+**Note**: Prior versions used `config.py` for configuration. While this is still supported with default values, using the `.env` file is recommended for easier configuration.
+
+### Configuration Utility
+
+For easier setup, use the interactive configuration utility:
+
+```bash
+python -m src.utils.configure
+```
+
+This utility will guide you through setting up your `.env` file with appropriate values for your environment.
 
 ## Usage
 
